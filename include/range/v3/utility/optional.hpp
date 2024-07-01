@@ -76,7 +76,7 @@ namespace ranges
         template<typename = void>
         [[noreturn]] bool throw_bad_optional_access()
         {
-            throw bad_optional_access{};
+            META_THROW_OR_ABORT(bad_optional_access{});
         }
 
         namespace optional_adl

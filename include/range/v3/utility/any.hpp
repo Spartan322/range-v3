@@ -14,6 +14,12 @@
 #ifndef RANGES_V3_UTILITY_ANY_HPP
 #define RANGES_V3_UTILITY_ANY_HPP
 
+#include <meta/meta_fwd.hpp>
+
+#if !META_HAS_STATIC_RTTI
+#error any requires static RTTI
+#endif
+
 #include <memory>
 #include <type_traits>
 #include <typeinfo>
@@ -192,7 +198,7 @@ namespace ranges
     meta::if_c<std::is_reference<T>() || copyable<T>, T> any_cast(any & x)
     {
         if(x.type() != typeid(detail::decay_t<T>))
-            throw bad_any_cast{};
+            META_THROW_OR_ABORT(bad_any_cast{});
         return static_cast<_any_::impl<detail::decay_t<T>> *>(x.ptr_.get())->get();
     }
 
@@ -201,7 +207,7 @@ namespace ranges
     meta::if_c<std::is_reference<T>() || copyable<T>, T> any_cast(any const & x)
     {
         if(x.type() != typeid(detail::decay_t<T>))
-            throw bad_any_cast{};
+            META_THROW_OR_ABORT(bad_any_cast{});
         return static_cast<_any_::impl<detail::decay_t<T>> const *>(x.ptr_.get())->get();
     }
 
@@ -210,7 +216,7 @@ namespace ranges
     meta::if_c<std::is_reference<T>() || copyable<T>, T> any_cast(any && x)
     {
         if(x.type() != typeid(detail::decay_t<T>))
-            throw bad_any_cast{};
+            META_THROW_OR_ABORT(bad_any_cast{});
         return static_cast<_any_::impl<detail::decay_t<T>> *>(x.ptr_.get())->get();
     }
 

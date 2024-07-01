@@ -50,7 +50,7 @@ namespace ranges
         template<typename Rng>
         static constexpr void check_throw(Rng && rng, range_difference_t<Rng> n)
         {
-            (n < 0 || n >= ranges::distance(rng)) ? throw std::out_of_range("ranges::at")
+            (n < 0 || n >= ranges::distance(rng)) ? META_THROW_OR_ABORT(std::out_of_range("ranges::at"))
                                                   : void(0);
         }
     };
