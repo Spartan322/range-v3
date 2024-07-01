@@ -452,7 +452,7 @@ namespace ranges
             template<typename U, std::size_t M>
             [[noreturn]] meta::if_c<M != N> operator()(indexed_element<U, M>) const
             {
-                throw bad_variant_access("bad variant access");
+                META_THROW_OR_ABORT(bad_variant_access("bad variant access"));
             }
             template<typename U>
             void operator()(indexed_element<U, N> t) const noexcept

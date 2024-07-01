@@ -192,6 +192,37 @@
 #define META_IS_CONSTRUCTIBLE(...) std::is_constructible<__VA_ARGS__>::value
 #endif
 
+#ifndef META_THROW_OR_ABORT
+#if __cpp_exceptions || _HAS_EXCEPTIONS
+#define META_THROW_OR_ABORT(_EXC) (throw (_EXC))
+#elif defined(_MSC_VER)
+#define META_THROW_OR_ABORT(_EXC) (_invoke_watson(nullptr, nullptr, nullptr, 0, 0))
+#else
+#define META_THROW_OR_ABORT(_EXC) (__builtin_abort())
+#endif
+#endif
+
+#ifndef META_HAS_STATIC_RTTI
+#if defined(__cpp_rtti) || defined(__RTTI) || defined(__INTEL_RTTI__) || \
+    defined(__GXX_RTTI) || defined(_CPPRTTI)
+#define META_HAS_STATIC_RTTI 1
+#elif defined(__has_feature)
+#if __has_feature(cxx_rtti)
+#define META_HAS_STATIC_RTTI 1
+#else
+#define META_HAS_STATIC_RTTI 0
+#endif
+#elif defined(_MSVC_STL_VERSION)
+#if _HAS_STATIC_RTTI
+#define META_HAS_STATIC_RTTI 1
+#else
+#define META_HAS_STATIC_RTTI 0
+#endif
+#else
+#define META_HAS_STATIC_RTTI 0
+#endif
+#endif
+
 /// \cond
 // Non-portable forward declarations of standard containers
 #ifdef _LIBCPP_VERSION
